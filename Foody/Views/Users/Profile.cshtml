@@ -1,0 +1,15 @@
+﻿@model User
+
+<div class="profile-info">
+    <!-- Display user info here (e.g., Name, Email, etc.) -->
+    <h2>@Model.Name's Profile</h2>
+    <p>@Model.Email</p>
+    <p>@Model.Description</p>
+    <img src="~/uploads/@Model.ProfilePicture" alt="Profile Picture" class="img-thumbnail" />
+
+
+    <!-- Edit icon linking to the EditProfile page -->
+    <a href="@Url.Action("EditProfile", "Users")">
+        <i class="fa fa-edit"></i> Edit Profile
+    </a>
+</div>
