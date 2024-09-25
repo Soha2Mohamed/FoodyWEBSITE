@@ -1,4 +1,4 @@
-﻿using Foody.Data;
+using Foody.Data;
 using Foody.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -235,5 +235,37 @@ namespace Foody.Controllers
             HttpContext.Session.Clear(); // Clear all session data
             return RedirectToAction("Login"); // Redirect back to login page
         }
+
+        public async Task<IActionResult> Delete()
+        {
+            var userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+            {
+                //i want to add declarative messages like in this case here i want o show a message to the user like: login if you want to delete your account
+                return RedirectToAction("Login");
+            }
+           var user=  await _applicationDbcontext.Users.FindAsync(userId.Value);
+
+            if (user == null)
+            {
+                RedirectToAction("Login");
+            }
+            if (!string.IsNullOrEmpty(user.ProfilePicture))
+            {
+                var filePath = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", user.ProfilePicture);
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }
+
+            _applicationDbcontext.Users.Remove(user);
+            await _applicationDbcontext.SaveChangesAsync();
+
+            HttpContext.Session.Clear();
+            return RedirectToAction("Login");
+
+        }
+       
     }
 }
