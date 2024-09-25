@@ -1,4 +1,4 @@
-﻿using Foody.Models;
+using Foody.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Foody.Data
@@ -40,6 +40,12 @@ namespace Foody.Data
     .WithMany(u => u.Ratings)
     .HasForeignKey(c => c.UserId)
     .OnDelete(DeleteBehavior.NoAction);  // Disable cascading delete
+
+            modelBuilder.Entity<User>()
+    .HasMany(u => u.Recipes)
+    .WithOne(r => r.User)
+    .OnDelete(DeleteBehavior.Cascade);
+
 
 
         }
